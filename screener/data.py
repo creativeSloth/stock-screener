@@ -13,8 +13,10 @@ def load_watchlist(filepath: str) -> list[str]:
     Returns:
         List of ticker symbols as strings.
     """
-    tickers: list[str] = [line.strip()
-                          for line in open(filepath) if line.strip()]
+    tickers: list[str] = [
+        line.strip()
+        for line in open(filepath)
+        if line.strip()]
     return tickers
 
 
