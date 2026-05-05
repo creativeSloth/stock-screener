@@ -20,7 +20,7 @@ def load_watchlist(filepath: str) -> list[str]:
     return tickers
 
 
-def get_stock_data(ticker: str) -> pd.DataFrame:
+def get_stock_data(tickers: str | list[str]) -> pd.DataFrame:
     """Download historical OHLCV data for a single ticker via Yahoo Finance.
 
     Args:
@@ -30,10 +30,10 @@ def get_stock_data(ticker: str) -> pd.DataFrame:
         DataFrame with columns: Open, High, Low, Close, Volume.
     """
     df: pd.DataFrame | None = yf.download(
-        ticker, period=PERIOD, interval=INTERVAL, auto_adjust=True
+        tickers=tickers, period=PERIOD, interval=INTERVAL, auto_adjust=True
     )
     if df is None:
-        raise ValueError(f"No data returned for ticker: {ticker}")
+        raise ValueError(f"No data returned for tickers: {tickers}")
     return df
 
 
