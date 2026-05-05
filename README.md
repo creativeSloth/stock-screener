@@ -133,7 +133,7 @@ This tool is for **educational and informational purposes only**. It does not co
 - [ ] Add pytest test suite
 - [ ] Migrate watchlists from .txt files to SQLite database (SQLAlchemy + CRUD via CLI)
 - [ ] E-mail summary (daily digest)
-- [ ] Streamlit dashboard
+- [ ] Streamlit dashboard incl. watchlist management (add, delete, group tickers)
 - [ ] Backtesting module
 - [ ] Docker support
 
