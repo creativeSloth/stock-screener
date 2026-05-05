@@ -1,7 +1,8 @@
 import pandas as pd
 import plotly.graph_objects as go
-from indicators import calculate_macd, calculate_rsi, calculate_sma
 from plotly.subplots import make_subplots
+
+from .indicators import calculate_macd, calculate_rsi, calculate_sma
 
 
 def plot_stock(ticker: str, df: pd.DataFrame) -> None:

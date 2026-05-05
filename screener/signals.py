@@ -1,5 +1,6 @@
 import pandas as pd
-from indicators import calculate_macd, calculate_rsi, calculate_sma
+
+from .indicators import calculate_macd, calculate_rsi, calculate_sma
 
 
 def get_signal(df: pd.DataFrame) -> dict[str, str]:
