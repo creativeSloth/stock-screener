@@ -171,7 +171,7 @@ def plot_stock(ticker: str, df: pd.DataFrame) -> None:
 
 
 if __name__ == "__main__":
-    from data import get_stock_data
+    from .data import get_stock_data
 
     df: pd.DataFrame = get_stock_data("SAP.DE")
     plot_stock("SAP.DE", df)

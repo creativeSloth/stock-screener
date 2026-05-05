@@ -89,7 +89,7 @@ def get_signal(df: pd.DataFrame) -> dict[str, str]:
 
 
 if __name__ == "__main__":
-    from data import get_stock_data
+    from .data import get_stock_data
 
     df: pd.DataFrame = get_stock_data("SAP.DE")
     result: dict[str, str] = get_signal(df)
