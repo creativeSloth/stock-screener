@@ -18,12 +18,12 @@ Automatically scans a watchlist of stocks, calculates technical indicators, and 
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Data source | yfinance (Yahoo Finance) |
-| Data processing | Pandas, NumPy |
-| Visualization | Plotly |
-| Language | Python 3.10+ |
+| Layer           | Technology               |
+| --------------- | ------------------------ |
+| Data source     | yfinance (Yahoo Finance) |
+| Data processing | Pandas, NumPy            |
+| Visualization   | Plotly                   |
+| Language        | Python 3.10+             |
 
 ---
 
@@ -74,17 +74,20 @@ Charts open automatically in your browser. HTML files are saved to `/output`.
 ## 📊 Indicators & Signals
 
 ### RSI (Relative Strength Index)
-| Value | Signal |
-|---|---|
-| < 30 | 🟢 Oversold → potential buy |
-| > 70 | 🔴 Overbought → potential sell |
-| 30–70 | ⚪ Neutral |
+
+| Value | Signal                         |
+| ----- | ------------------------------ |
+| < 30  | 🟢 Oversold → potential buy    |
+| > 70  | 🔴 Overbought → potential sell |
+| 30–70 | ⚪ Neutral                     |
 
 ### Moving Averages (SMA 20 / SMA 50)
+
 - **Golden Cross** (SMA 20 crosses above SMA 50) → 🟢 Buy signal
 - **Death Cross** (SMA 20 crosses below SMA 50) → 🔴 Sell signal
 
 ### MACD
+
 - MACD line crosses above signal line → 🟢 Bullish momentum
 - MACD line crosses below signal line → 🔴 Bearish momentum
 
@@ -128,6 +131,7 @@ This tool is for **educational and informational purposes only**. It does not co
 ## 🗺️ Roadmap
 
 - [ ] Add pytest test suite
+- [ ] Migrate watchlists from .txt files to SQLite database (SQLAlchemy + CRUD via CLI)
 - [ ] E-mail summary (daily digest)
 - [ ] Streamlit dashboard
 - [ ] Backtesting module
