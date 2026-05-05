@@ -1,7 +1,7 @@
-import yfinance as yf
 import pandas as pd
+import yfinance as yf
 
-from config import PERIOD, INTERVAL, WATCHLIST_DAX, WATCHLIST_US
+from config import INTERVAL, PERIOD, WATCHLIST_DAX, WATCHLIST_US
 
 
 def load_watchlist(filepath: str) -> list[str]:
