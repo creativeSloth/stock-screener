@@ -1,12 +1,17 @@
-# Watchlist
-WATCHLIST_DAX = "watchlists/dax.txt"
-WATCHLIST_US = "watchlists/us.txt"
+from dataclasses import dataclass
 
-# Data settings
-PERIOD = "6mo"   # Lookback period
-INTERVAL = "1d"    # Candle interval
 
-# Indicators
-RSI_PERIOD = 14
-SMA_SHORT = 20
-SMA_LONG = 50
+@dataclass
+class Config:
+    # Watchlist paths
+    watchlist_dax: str = "watchlists/dax.txt"
+    watchlist_us: str = "watchlists/us.txt"
+
+    # Data settings
+    period: str = "6mo"  # Lookback period
+    interval: str = "1d"   # Candle interval
+
+    # Indicators
+    rsi_period: int = 14
+    sma_short: int = 20
+    sma_long: int = 50

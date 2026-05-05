@@ -1,7 +1,9 @@
 import pandas as pd
 import yfinance as yf
 
-from config import INTERVAL, PERIOD, WATCHLIST_DAX, WATCHLIST_US
+from config import Config
+
+config: Config = Config()
 
 
 def load_watchlist(filepath: str) -> list[str]:
@@ -16,21 +18,26 @@ def load_watchlist(filepath: str) -> list[str]:
     tickers: list[str] = [
         line.strip()
         for line in open(filepath)
-        if line.strip()]
+        if line.strip()
+    ]
     return tickers
 
 
 def get_stock_data(tickers: str | list[str]) -> pd.DataFrame:
-    """Download historical OHLCV data for a single ticker via Yahoo Finance.
+    """Download historical OHLCV data for one or more tickers via Yahoo Finance.
 
     Args:
-        ticker: Yahoo Finance ticker symbol (e.g. 'SAP.DE', 'AAPL').
+        tickers: Yahoo Finance ticker symbol or list of symbols
+                (e.g. 'SAP.DE' or ['SAP.DE', 'AAPL']).
 
     Returns:
         DataFrame with columns: Open, High, Low, Close, Volume.
     """
     df: pd.DataFrame | None = yf.download(
-        tickers=tickers, period=PERIOD, interval=INTERVAL, auto_adjust=True
+        tickers,
+        period=config.period,
+        interval=config.interval,
+        auto_adjust=True
     )
     if df is None:
         raise ValueError(f"No data returned for tickers: {tickers}")
@@ -43,8 +50,8 @@ def load_all_tickers() -> list[str]:
     Returns:
         Combined list of ticker symbols.
     """
-    dax: list[str] = load_watchlist(WATCHLIST_DAX)
-    us: list[str] = load_watchlist(WATCHLIST_US)
+    dax: list[str] = load_watchlist(config.watchlist_dax)
+    us: list[str] = load_watchlist(config.watchlist_us)
     combined: list[str] = dax + us
     return combined
 
