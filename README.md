@@ -38,9 +38,10 @@ stock-screener/
 │   ├── universe.py      # Wikipedia scraper + 7-day cache
 │   ├── data.py          # yfinance data loader
 │   ├── indicators.py    # RSI, SMA, MACD calculations
-│   ├── signals.py       # Signal logic (buy/sell/neutral)
+│   ├── signals.py       # Signal logic — trend position & crossover
 │   ├── charts.py        # Plotly chart generation (per stock)
-│   └── dashboard.py     # Single-page HTML dashboard
+│   ├── dashboard.py     # Single-page HTML dashboard with method switcher
+│   └── progress.py      # Browser progress page (auto-refreshes while running)
 ├── cache/               # Auto-generated universe cache (gitignored)
 ├── output/              # Generated HTML files (gitignored)
 ├── main.py              # Entry point — run the screener
@@ -96,21 +97,51 @@ class Config:
 
 ### RSI (Relative Strength Index)
 
+Applies to both signal methods.
+
 | Value | Signal                         |
 | ----- | ------------------------------ |
 | < 30  | 🟢 Oversold → potential buy    |
 | > 70  | 🔴 Overbought → potential sell |
 | 30–70 | ⚪ Neutral                     |
 
-### Moving Averages (SMA 20 / SMA 50)
+> Source: Wilder, J.W. Jr. (1978). *New Concepts in Technical Trading Systems*. Trend Research.
 
-- **Golden Cross** (SMA 20 crosses above SMA 50) → 🟢 Buy signal
-- **Death Cross** (SMA 20 crosses below SMA 50) → 🔴 Sell signal
+---
 
-### MACD
+### Signal Methods (switchable in the dashboard)
 
-- MACD line crosses above signal line → 🟢 Bullish momentum
-- MACD line crosses below signal line → 🔴 Bearish momentum
+The dashboard offers a dropdown to switch between two calculation methods for SMA and MACD signals:
+
+#### Trend Position (default)
+
+Evaluates the **current state** of each indicator — whether the market is in a bullish or bearish phase right now.
+
+| Indicator | BUY | SELL |
+| --------- | --- | ---- |
+| SMA | SMA 20 > SMA 50 | SMA 20 < SMA 50 |
+| MACD | MACD line > Signal line | MACD line < Signal line |
+
+✓ More frequent signals, reflects ongoing trends  
+✗ Can produce false signals in sideways markets (whipsaw)
+
+> Source: Murphy, J.J. (1999). *Technical Analysis of the Financial Markets*. New York Institute of Finance. — Kaufman, P.J. (2013). *Trading Systems and Methods*. Wiley, 5th ed.
+
+#### Crossover
+
+Detects the **exact moment** a trend changes direction. A signal fires only on the day the indicator lines cross.
+
+| Indicator | BUY | SELL |
+| --------- | --- | ---- |
+| SMA | Golden Cross (SMA 20 crosses above SMA 50) | Death Cross (SMA 20 crosses below SMA 50) |
+| MACD | MACD crosses above signal line | MACD crosses below signal line |
+
+✓ Fewer, deliberate signals — historically validated  
+✗ Lagging by nature — trend has already shifted before the signal fires
+
+> Source: Brock, W., Lakonishok, J., & LeBaron, B. (1992). "Simple Technical Trading Rules and the Stochastic Properties of Stock Returns." *Journal of Finance*, 47(5), 1731–1764.
+
+---
 
 ### Overall Signal
 
