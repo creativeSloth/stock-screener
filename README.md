@@ -2,17 +2,18 @@
 
 A Python-based stock screening and signal tool for German and US equities — built with **yfinance**, **Pandas**, and **Plotly**.
 
-Automatically scans a watchlist of stocks, calculates technical indicators, and visualizes buy/sell signals in an interactive browser chart.
+Automatically fetches index constituents from Wikipedia, calculates technical indicators, and presents buy/sell signals in a single interactive dashboard.
 
 ---
 
 ## 🚀 Features
 
-- Fetches live and historical market data via Yahoo Finance (no API key required)
+- Fetches live index constituents (DAX, MDAX, Dow Jones, NASDAQ 100, S&P 500) from Wikipedia — no manual watchlists required
+- 7-day local cache to avoid repeated Wikipedia requests
+- Downloads historical market data via Yahoo Finance (no API key required)
 - Calculates key technical indicators: RSI, Moving Averages (SMA 20/50), MACD
-- Screens multiple stocks simultaneously and ranks by signal strength
-- Interactive browser charts with Plotly (candlesticks, indicators, signal markers)
-- Supports DAX, MDAX, S&P 500, and Nasdaq stocks
+- Single HTML dashboard with color-coded signals per index — no more one-tab-per-stock
+- Click any row in the dashboard to load its full interactive chart inline
 
 ---
 
@@ -20,6 +21,7 @@ Automatically scans a watchlist of stocks, calculates technical indicators, and 
 
 | Layer           | Technology               |
 | --------------- | ------------------------ |
+| Index universe  | Wikipedia + requests     |
 | Data source     | yfinance (Yahoo Finance) |
 | Data processing | Pandas, NumPy            |
 | Visualization   | Plotly                   |
@@ -33,14 +35,14 @@ Automatically scans a watchlist of stocks, calculates technical indicators, and 
 stock-screener/
 ├── screener/
 │   ├── __init__.py
+│   ├── universe.py      # Wikipedia scraper + 7-day cache
 │   ├── data.py          # yfinance data loader
 │   ├── indicators.py    # RSI, SMA, MACD calculations
 │   ├── signals.py       # Signal logic (buy/sell/neutral)
-│   └── charts.py        # Plotly chart generation
-├── watchlists/
-│   ├── dax.txt          # German stock tickers
-│   └── us.txt           # US stock tickers
-├── output/              # Generated HTML charts
+│   ├── charts.py        # Plotly chart generation (per stock)
+│   └── dashboard.py     # Single-page HTML dashboard
+├── cache/               # Auto-generated universe cache (gitignored)
+├── output/              # Generated HTML files (gitignored)
 ├── main.py              # Entry point — run the screener
 ├── config.py            # Configurable parameters
 ├── requirements.txt
@@ -67,7 +69,26 @@ pip install -r requirements.txt
 python main.py
 ```
 
-Charts open automatically in your browser. HTML files are saved to `/output`.
+The dashboard opens automatically in your browser at `output/dashboard.html`.
+
+---
+
+## ⚙️ Configuration
+
+Edit `config.py` to customize the screener:
+
+```python
+@dataclass
+class Config:
+    # Indices to scan — available: DAX, MDAX, DOW, NASDAQ100, SP500
+    indices: list[str] = ["DAX", "DOW", "NASDAQ100"]
+
+    period: str = "6mo"   # Data lookback period
+    interval: str = "1d"  # Candle interval
+    rsi_period: int = 14  # RSI calculation window
+    sma_short: int = 20   # Short moving average
+    sma_long: int = 50    # Long moving average
+```
 
 ---
 
@@ -91,34 +112,19 @@ Charts open automatically in your browser. HTML files are saved to `/output`.
 - MACD line crosses above signal line → 🟢 Bullish momentum
 - MACD line crosses below signal line → 🔴 Bearish momentum
 
----
+### Overall Signal
 
-## 🖥️ Example Output
-
-```
-Screening 20 stocks...
-
-Ticker   RSI     SMA Signal    MACD Signal   Overall
-------   -----   ----------    -----------   -------
-SAP.DE   28.4    Golden Cross  Bullish       🟢 STRONG BUY
-BAYN.DE  71.2    Neutral       Bearish       🔴 SELL
-AAPL     45.8    Neutral       Bullish       ⚪ NEUTRAL
-NVDA     33.1    Golden Cross  Bullish       🟢 BUY
-```
+At least 2 out of 3 indicators must agree to generate a BUY or SELL signal.
 
 ---
 
-## ⚙️ Configuration
+## 🖥️ Dashboard
 
-Edit `config.py` to customize the screener:
+Running `python main.py` opens a single `output/dashboard.html` with:
 
-```python
-PERIOD = "6mo"          # Data lookback period
-INTERVAL = "1d"         # Candle interval
-RSI_PERIOD = 14         # RSI calculation window
-SMA_SHORT = 20          # Short moving average
-SMA_LONG = 50           # Long moving average
-```
+- A color-coded summary table per index (🟢 BUY / 🔴 SELL / neutral)
+- RSI value and individual indicator signals per stock
+- Click any row → detail chart slides up inline (candlestick, SMA, RSI, MACD)
 
 ---
 
@@ -131,9 +137,8 @@ This tool is for **educational and informational purposes only**. It does not co
 ## 🗺️ Roadmap
 
 - [ ] Add pytest test suite
-- [ ] Migrate watchlists from .txt files to SQLite database (SQLAlchemy + CRUD via CLI)
 - [ ] E-mail summary (daily digest)
-- [ ] Streamlit dashboard incl. watchlist management (add, delete, group tickers)
+- [ ] Streamlit dashboard incl. watchlist management
 - [ ] Backtesting module
 - [ ] Docker support
 
