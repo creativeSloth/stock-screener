@@ -159,15 +159,8 @@ def plot_stock(ticker: str, df: pd.DataFrame) -> None:
         legend=dict(orientation="h", y=-0.1)  # legend below chart
     )
 
-    # --- Save and open ---
-    # Replace dots in ticker (e.g. SAP.DE → SAP_DE) for valid filename
-    # write_html saves a self-contained HTML file — no server needed,
-    # just open it in any browser
     output_path: str = f"output/{ticker.replace('.', '_')}.html"
     fig.write_html(output_path)
-
-    # fig.show() opens the chart directly in the default browser
-    fig.show()
 
 
 if __name__ == "__main__":
