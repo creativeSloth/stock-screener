@@ -24,10 +24,15 @@ def run_screener() -> None:
 
     init_progress(total)
 
-    for index_name, tickers in universe.items():
-        print(f"\n── {index_name} ({len(tickers)} stocks) ──")
+    for index_name, stocks in universe.items():
+        print(f"\n── {index_name} ({len(stocks)} stocks) ──")
 
-        for ticker in tickers:
+        for stock in stocks:
+            ticker: str = stock["ticker"]
+            name: str = stock.get("name", "")
+            wkn: str = stock.get("wkn", "")
+            isin: str = stock.get("isin", "")
+            cusip: str = stock.get("cusip", "")
             count += 1
             try:
                 df: pd.DataFrame = get_stock_data(ticker)
@@ -44,6 +49,10 @@ def run_screener() -> None:
                 results.append({
                     "index_name": index_name,
                     "ticker": ticker,
+                    "name": name,
+                    "wkn": wkn,
+                    "isin": isin,
+                    "cusip": cusip,
                     "signals": signals_trend,
                     "signals_crossover": signals_crossover,
                     "rsi_value": rsi_value,

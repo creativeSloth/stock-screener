@@ -13,6 +13,7 @@ Automatically fetches index constituents from Wikipedia, calculates technical in
 - Downloads historical market data via Yahoo Finance (no API key required)
 - Calculates key technical indicators: RSI, Moving Averages (SMA 20/50), MACD
 - Single HTML dashboard with color-coded signals per index — no more one-tab-per-stock
+- Dashboard shows company name and WKN (derived from ISIN via yfinance, German stocks only)
 - Click any row in the dashboard to load its full interactive chart inline
 
 ---
@@ -154,6 +155,7 @@ At least 2 out of 3 indicators must agree to generate a BUY or SELL signal.
 Running `python main.py` opens a single `output/dashboard.html` with:
 
 - A color-coded summary table per index (🟢 BUY / 🔴 SELL / neutral)
+- Company name and WKN per stock (WKN available for German stocks only)
 - RSI value and individual indicator signals per stock
 - Click any row → detail chart slides up inline (candlestick, SMA, RSI, MACD)
 

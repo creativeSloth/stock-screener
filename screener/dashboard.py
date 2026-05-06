@@ -96,6 +96,10 @@ tr.stock-row.active { background: #0d1f10; }
 td { padding: 7px 14px; border-bottom: 1px solid #161616; }
 
 .ticker { font-weight: 600; color: #fff; font-family: monospace; font-size: 0.9rem; }
+.stock-name { color: #aaa; font-size: 0.85rem; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wkn { color: #555; font-family: monospace; font-size: 0.82rem; }
+.isin { color: #555; font-family: monospace; font-size: 0.82rem; }
+.cusip { color: #555; font-family: monospace; font-size: 0.82rem; }
 .rsi-val { color: #666; }
 
 .signal-buy     { color: #00c853; font-weight: 500; }
@@ -307,7 +311,7 @@ def build_dashboard(
         )
         parts.append(
             '<table><thead><tr>'
-            '<th>Ticker</th><th>RSI</th>'
+            '<th>Ticker</th><th>Name</th><th>WKN</th><th>ISIN</th><th>CUSIP</th><th>RSI</th>'
             '<th>RSI Signal</th><th>SMA Signal</th><th>MACD Signal</th>'
             '<th>Overall</th>'
             '</tr></thead><tbody>'
@@ -323,12 +327,20 @@ def build_dashboard(
             trend_json = json.dumps({k: sig[k] for k in ("rsi", "sma", "macd", "overall")})
             cross_json = json.dumps({k: sig_cross[k] for k in ("rsi", "sma", "macd", "overall")})
 
+            name = r.get("name", "")
+            wkn = r.get("wkn", "")
+            isin = r.get("isin", "")
+            cusip = r.get("cusip", "")
             parts.append(
                 f'<tr class="stock-row" id="row-{safe}" '
                 f"data-trend='{trend_json}' "
                 f"data-cross='{cross_json}' "
                 f'onclick="showChart(\'{safe}\',\'{filename}\')">'
                 f'<td class="ticker">{ticker}</td>'
+                f'<td class="stock-name" title="{name}">{name or "—"}</td>'
+                f'<td class="wkn">{wkn or "—"}</td>'
+                f'<td class="isin">{isin or "—"}</td>'
+                f'<td class="cusip">{cusip or "—"}</td>'
                 f'<td class="rsi-val">{r["rsi_value"]:.1f}</td>'
                 f'<td class="cell-rsi {_signal_cls(sig["rsi"])}">{sig["rsi"]}</td>'
                 f'<td class="cell-sma {_signal_cls(sig["sma"])}">{sig["sma"]}</td>'
