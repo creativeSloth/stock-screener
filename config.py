@@ -1,11 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
 class Config:
-    # Watchlist paths
-    watchlist_dax: str = "watchlists/dax.txt"
-    watchlist_us: str = "watchlists/us.txt"
+    # Indices to scan — available: DAX, MDAX, DOW, NASDAQ100, SP500
+    indices: list[str] = field(default_factory=lambda: ["DAX", "DOW", "NASDAQ100"])
 
     # Data settings
     period: str = "6mo"  # Lookback period
