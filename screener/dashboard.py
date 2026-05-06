@@ -1,4 +1,3 @@
-import webbrowser
 from datetime import datetime
 from pathlib import Path
 
@@ -190,5 +189,3 @@ def build_dashboard(
     Path(output_path).parent.mkdir(exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
         f.write("\n".join(parts))
-
-    webbrowser.open(f"file://{Path(output_path).resolve()}")

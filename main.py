@@ -5,6 +5,7 @@ from screener.charts import plot_stock
 from screener.dashboard import build_dashboard
 from screener.data import get_stock_data
 from screener.indicators import calculate_rsi
+from screener.progress import finish_progress, init_progress, update_progress
 from screener.signals import get_signal
 from screener.universe import load_universe
 
@@ -20,6 +21,8 @@ def run_screener() -> None:
     results: list[dict] = []
     total = sum(len(t) for t in universe.values())
     count = 0
+
+    init_progress(total)
 
     for index_name, tickers in universe.items():
         print(f"\n── {index_name} ({len(tickers)} stocks) ──")
@@ -47,9 +50,12 @@ def run_screener() -> None:
             except Exception as e:
                 print(f"  [{count}/{total}] {ticker:<12} ERROR: {e}")
 
+            update_progress(count, total, ticker)
+
     print("\n✅ Generating dashboard...")
     build_dashboard(results)
-    print("Dashboard saved to output/dashboard.html")
+    finish_progress()
+    print("Done — dashboard.html")
 
 
 if __name__ == "__main__":
