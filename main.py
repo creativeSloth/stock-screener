@@ -18,11 +18,14 @@ def run_screener() -> None:
     universe: dict[str, list[str]] = load_universe(config.indices)
 
     results: list[dict] = []
+    total = sum(len(t) for t in universe.values())
+    count = 0
 
     for index_name, tickers in universe.items():
         print(f"\n── {index_name} ({len(tickers)} stocks) ──")
 
         for ticker in tickers:
+            count += 1
             try:
                 df: pd.DataFrame = get_stock_data(ticker)
                 signals: dict[str, str] = get_signal(df)
@@ -30,7 +33,7 @@ def run_screener() -> None:
 
                 overall = signals["overall"]
                 marker = {"BUY": "▲", "SELL": "▼"}.get(overall, "–")
-                print(f"  {ticker:<12} {marker} {overall}")
+                print(f"  [{count}/{total}] {ticker:<12} {marker} {overall}")
 
                 plot_stock(ticker, df)
 
@@ -42,7 +45,7 @@ def run_screener() -> None:
                 })
 
             except Exception as e:
-                print(f"  {ticker:<12} ERROR: {e}")
+                print(f"  [{count}/{total}] {ticker:<12} ERROR: {e}")
 
     print("\n✅ Generating dashboard...")
     build_dashboard(results)
