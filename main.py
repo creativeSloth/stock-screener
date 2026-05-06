@@ -6,7 +6,7 @@ from screener.dashboard import build_dashboard
 from screener.data import get_stock_data
 from screener.indicators import calculate_rsi
 from screener.progress import finish_progress, init_progress, update_progress
-from screener.signals import get_signal
+from screener.signals import get_signal_crossover, get_signal_trend
 from screener.universe import load_universe
 
 config = Config()
@@ -31,10 +31,11 @@ def run_screener() -> None:
             count += 1
             try:
                 df: pd.DataFrame = get_stock_data(ticker)
-                signals: dict[str, str] = get_signal(df)
+                signals_trend: dict[str, str] = get_signal_trend(df)
+                signals_crossover: dict[str, str] = get_signal_crossover(df)
                 rsi_value: float = float(calculate_rsi(df).iloc[-1])
 
-                overall = signals["overall"]
+                overall = signals_trend["overall"]
                 marker = {"BUY": "▲", "SELL": "▼"}.get(overall, "–")
                 print(f"  [{count}/{total}] {ticker:<12} {marker} {overall}")
 
@@ -43,7 +44,8 @@ def run_screener() -> None:
                 results.append({
                     "index_name": index_name,
                     "ticker": ticker,
-                    "signals": signals,
+                    "signals": signals_trend,
+                    "signals_crossover": signals_crossover,
                     "rsi_value": rsi_value,
                 })
 
