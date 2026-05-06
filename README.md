@@ -83,7 +83,7 @@ Edit `config.py` to customize the screener:
 @dataclass
 class Config:
     # Indices to scan — available: DAX, MDAX, DOW, NASDAQ100, SP500
-    indices: list[str] = ["DAX", "DOW", "NASDAQ100"]
+    indices: list[str] = ["DAX"]
 
     period: str = "6mo"   # Data lookback period
     interval: str = "1d"  # Candle interval
@@ -106,7 +106,7 @@ Applies to both signal methods.
 | > 70  | 🔴 Overbought → potential sell |
 | 30–70 | ⚪ Neutral                     |
 
-> Source: Wilder, J.W. Jr. (1978). *New Concepts in Technical Trading Systems*. Trend Research.
+> Source: Wilder, J.W. Jr. (1978). _New Concepts in Technical Trading Systems_. Trend Research.
 
 ---
 
@@ -118,29 +118,29 @@ The dashboard offers a dropdown to switch between two calculation methods for SM
 
 Evaluates the **current state** of each indicator — whether the market is in a bullish or bearish phase right now.
 
-| Indicator | BUY | SELL |
-| --------- | --- | ---- |
-| SMA | SMA 20 > SMA 50 | SMA 20 < SMA 50 |
-| MACD | MACD line > Signal line | MACD line < Signal line |
+| Indicator | BUY                     | SELL                    |
+| --------- | ----------------------- | ----------------------- |
+| SMA       | SMA 20 > SMA 50         | SMA 20 < SMA 50         |
+| MACD      | MACD line > Signal line | MACD line < Signal line |
 
 ✓ More frequent signals, reflects ongoing trends  
 ✗ Can produce false signals in sideways markets (whipsaw)
 
-> Source: Murphy, J.J. (1999). *Technical Analysis of the Financial Markets*. New York Institute of Finance. — Kaufman, P.J. (2013). *Trading Systems and Methods*. Wiley, 5th ed.
+> Source: Murphy, J.J. (1999). _Technical Analysis of the Financial Markets_. New York Institute of Finance. — Kaufman, P.J. (2013). _Trading Systems and Methods_. Wiley, 5th ed.
 
 #### Crossover
 
 Detects the **exact moment** a trend changes direction. A signal fires only on the day the indicator lines cross.
 
-| Indicator | BUY | SELL |
-| --------- | --- | ---- |
-| SMA | Golden Cross (SMA 20 crosses above SMA 50) | Death Cross (SMA 20 crosses below SMA 50) |
-| MACD | MACD crosses above signal line | MACD crosses below signal line |
+| Indicator | BUY                                        | SELL                                      |
+| --------- | ------------------------------------------ | ----------------------------------------- |
+| SMA       | Golden Cross (SMA 20 crosses above SMA 50) | Death Cross (SMA 20 crosses below SMA 50) |
+| MACD      | MACD crosses above signal line             | MACD crosses below signal line            |
 
 ✓ Fewer, deliberate signals — historically validated  
 ✗ Lagging by nature — trend has already shifted before the signal fires
 
-> Source: Brock, W., Lakonishok, J., & LeBaron, B. (1992). "Simple Technical Trading Rules and the Stochastic Properties of Stock Returns." *Journal of Finance*, 47(5), 1731–1764.
+> Source: Brock, W., Lakonishok, J., & LeBaron, B. (1992). "Simple Technical Trading Rules and the Stochastic Properties of Stock Returns." _Journal of Finance_, 47(5), 1731–1764.
 
 ---
 
